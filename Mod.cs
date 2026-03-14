@@ -1,20 +1,29 @@
 ﻿using Colossal.IO.AssetDatabase;
 using Colossal.Logging;
-using ExtractorsBegone.Localization;
 using Game;
 using Game.Modding;
 using Game.SceneFlow;
+using Game.Simulation;
+using Game.UI;
+using Unity.Entities;
 
 namespace crud89.ExtractorsBegone
 {
+    using Systems;
+    using Localization;
+
     public class ExtractorsBegone : IMod
     {
         public static ILog log = LogManager.GetLogger(nameof(ExtractorsBegone)).SetShowsErrorsInUI(false);
+
+        public static ExtractorsBegone Instance { get; private set; }
 
         internal ModSettings Settings { get; set; }
 
         public void OnLoad(UpdateSystem updateSystem)
         {
+            Instance = this;
+
             // Register log level.
 #if VERBOSE
             log.SetEffectiveness(Level.All);
@@ -30,6 +39,14 @@ namespace crud89.ExtractorsBegone
 
             if (GameManager.instance.modManager.TryGetExecutableAsset(this, out var asset))
                 log.Info($"Current mod asset at {asset.path}");
+
+            // Disable built-in systems.
+            DisableBuiltinSystems();
+            log.Info("Builtin systems disabled.");
+
+            // Inject custom systems.
+            InjectSystemOverrides(updateSystem);
+            log.Info("Custom systems injected.");
 
             // Register mod settings.
             Settings = new ModSettings(this);
@@ -52,6 +69,29 @@ namespace crud89.ExtractorsBegone
 
             Settings?.UnregisterInOptionsUI();
             Settings = null;
+        }
+
+        private void DisableBuiltinSystems()
+        {
+            var world = World.DefaultGameObjectInjectionWorld;
+
+            {
+                var areaSpawnSystem = world.GetExistingSystem<AreaSpawnSystem>();
+                ref var state = ref world.Unmanaged.ResolveSystemStateRef(areaSpawnSystem);
+                state.Enabled = false;
+            }
+
+            {
+                var workCarAiSystem = world.GetExistingSystem<WorkCarAISystem>();
+                ref var state = ref world.Unmanaged.ResolveSystemStateRef(workCarAiSystem);
+                state.Enabled = false;
+            }
+        }
+
+        private void InjectSystemOverrides(UpdateSystem updateSystem)
+        {
+            updateSystem.UpdateAt<ExtractorAreaSystem>(SystemUpdatePhase.GameSimulation);
+            updateSystem.UpdateAt<WorkCarSystem>(SystemUpdatePhase.GameSimulation);
         }
     }
 }
