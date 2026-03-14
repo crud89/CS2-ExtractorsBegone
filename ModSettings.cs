@@ -45,8 +45,20 @@ namespace crud89.ExtractorsBegone
         public bool AllowFishExtractors { get; set; }
 
         [SettingsUISection(WorkVehiclesGroupName)]
-        [SettingsUISetter(typeof(ModSettings), nameof(ToggleWorkVehicles))]
-        public bool DisableWorkVehicles { get; set; }
+        public bool AllowFarmVehicles { get; set; }
+
+        [SettingsUISection(WorkVehiclesGroupName)]
+        public bool AllowForestVehicles { get; set; }
+
+        [SettingsUISection(WorkVehiclesGroupName)]
+        public bool AllowOilVehicles { get; set; }
+
+        [SettingsUISection(WorkVehiclesGroupName)]
+        public bool AllowOreVehicles { get; set; }
+
+        [SettingsUISection(WorkVehiclesGroupName)]
+        public bool AllowFishingBoats { get; set; }
+
 
         // TODO: Extended controls for work vehicle types.
 
@@ -76,14 +88,21 @@ namespace crud89.ExtractorsBegone
         {
             this.DisableExtractorBuildings = true;
             this.AllowFarmExtractors = false;
+            this.AllowForestExtractors = false;
+            this.AllowOilExtractors = false;
+            this.AllowOreExtractors = false;
+            this.AllowFishExtractors = false;
 
-            this.DisableWorkVehicles = true;
+            this.AllowFarmVehicles = false;
+            this.AllowForestVehicles = false;
+            this.AllowOilVehicles = false;
+            this.AllowOreVehicles = false;
+            this.AllowFishingBoats = true;
         }
 
         public void ApplySystemStates()
         {
             ToggleExtractorBuildings(DisableExtractorBuildings);
-            ToggleWorkVehicles(DisableWorkVehicles);
         }
 
         private void ToggleExtractorBuildings(bool disabled)
@@ -106,36 +125,20 @@ namespace crud89.ExtractorsBegone
             }
         }
 
-        private void ToggleWorkVehicles(bool disabled)
-        {
-            // Get default game object.
-            var world = World.DefaultGameObjectInjectionWorld;
-
-            // Disable work car AI system.
-            ExtractorsBegone.log.InfoFormat("Toggle work car AI system: {0}.", !disabled);
-
-            try
-            {
-                var workCarSystem = world.GetExistingSystem<WorkCarSystem>();
-                ref var state = ref world.Unmanaged.ResolveSystemStateRef(workCarSystem);
-                state.Enabled = !disabled;
-            }
-            catch(Exception ex)
-            {
-                ExtractorsBegone.log.Error(ex);
-            }
-        }
-
         private void DespawnExtractorBuildings(bool despawn)
         {
             if (!despawn)
                 return;
+
+            // TODO: Implement me.
         }
 
         private void DespawnWorkVehicles(bool despawn)
         {
             if (!despawn)
                 return;
+
+            // TODO: Implement me.
         }
     }
 }

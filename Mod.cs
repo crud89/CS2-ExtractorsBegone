@@ -82,8 +82,8 @@ namespace crud89.ExtractorsBegone
             }
 
             {
-                var workCarAiSystem = world.GetExistingSystem<WorkCarAISystem>();
-                ref var state = ref world.Unmanaged.ResolveSystemStateRef(workCarAiSystem);
+                var areaLotSimulationSystem = world.GetExistingSystem<Game.Simulation.AreaLotSimulationSystem>();
+                ref var state = ref world.Unmanaged.ResolveSystemStateRef(areaLotSimulationSystem);
                 state.Enabled = false;
             }
         }
@@ -91,7 +91,7 @@ namespace crud89.ExtractorsBegone
         private void InjectSystemOverrides(UpdateSystem updateSystem)
         {
             updateSystem.UpdateAt<ExtractorAreaSystem>(SystemUpdatePhase.GameSimulation);
-            updateSystem.UpdateAt<WorkCarSystem>(SystemUpdatePhase.GameSimulation);
+            updateSystem.UpdateAt<AreaLotSimulationSystem>(SystemUpdatePhase.GameSimulation);
         }
     }
 }
