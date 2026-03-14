@@ -1,15 +1,17 @@
-﻿using Colossal.Logging;
+﻿using Colossal.IO.AssetDatabase;
+using Colossal.Logging;
+using ExtractorsBegone.Localization;
 using Game;
 using Game.Modding;
 using Game.SceneFlow;
-using Game.Simulation;
-using Unity.Entities;
 
 namespace crud89.ExtractorsBegone
 {
-    public class ExtractorsBegoneMod : IMod
+    public class ExtractorsBegone : IMod
     {
-        public static ILog log = LogManager.GetLogger("ExtractorsBegone").SetShowsErrorsInUI(false);
+        public static ILog log = LogManager.GetLogger(nameof(ExtractorsBegone)).SetShowsErrorsInUI(false);
+
+        internal ModSettings Settings { get; set; }
 
         public void OnLoad(UpdateSystem updateSystem)
         {
@@ -24,31 +26,32 @@ namespace crud89.ExtractorsBegone
             log.SetEffectiveness(Level.Info);
 #endif 
 
-            log.Info(nameof(OnLoad));
+            log.Info($"{nameof(ExtractorsBegone)}::{nameof(OnLoad)}");
 
             if (GameManager.instance.modManager.TryGetExecutableAsset(this, out var asset))
                 log.Info($"Current mod asset at {asset.path}");
 
-            var world = World.DefaultGameObjectInjectionWorld;
+            // Register mod settings.
+            Settings = new ModSettings(this);
+            Settings.RegisterInOptionsUI();
 
-            // Disable area spawn system, which is spawning sub-buildings and storage facilities.
-            log.Info("Disabling area spawn system...");
-            var areaSpawnSystem = world.GetExistingSystem<AreaSpawnSystem>();
-            ref var state = ref world.Unmanaged.ResolveSystemStateRef(areaSpawnSystem);
-            state.Enabled = false;
+            AssetDatabase.global.LoadSettings(nameof(ExtractorsBegone), Settings, new ModSettings(this));
+            Settings.ApplySystemStates();
+            log.Info("Settings loaded.");
 
-            // Disable work car AI system.
-            log.Info("Disabling work car AI system...");
-            var workCarAiSystem = world.GetExistingSystem<WorkCarAISystem>();
-            state = ref world.Unmanaged.ResolveSystemStateRef(workCarAiSystem);
-            state.Enabled = false;
+            // Load default locate.
+            GameManager.instance.localizationManager.AddSource("en-US", new ModSettingsDefaultLocale(Settings));
+            log.Info("Default locale loaded.");
 
-            log.Info("Systems disabled.");
+            // TODO: Load additional localizations.
         }
 
         public void OnDispose()
         {
-            log.Info(nameof(OnDispose));
+            log.Info($"{nameof(ExtractorsBegone)}::{nameof(OnDispose)}");
+
+            Settings?.UnregisterInOptionsUI();
+            Settings = null;
         }
     }
 }
