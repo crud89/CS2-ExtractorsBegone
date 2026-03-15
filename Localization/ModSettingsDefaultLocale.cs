@@ -1,19 +1,21 @@
 ﻿using Colossal;
-using crud89.ExtractorsBegone;
 using System.Collections.Generic;
 
 namespace crud89.ExtractorsBegone.Localization
 {
     public class ModSettingsDefaultLocale : IDictionarySource
     {
-        private ModSettings Settings { get; set; }
-
         private Dictionary<string, string> Entries { get; set; }
 
         public ModSettingsDefaultLocale(ModSettings settings)
         {
-            Settings = settings;
             Entries = LoadSettingsLocale(settings);
+        }
+
+        public IEnumerable<KeyValuePair<string, string>> ReadEntries(IList<IDictionaryEntryError> errors, Dictionary<string, int> indexCounts) => Entries;
+
+        public void Unload()
+        {
         }
 
         private static Dictionary<string, string> LoadSettingsLocale(ModSettings settings)
@@ -25,18 +27,18 @@ namespace crud89.ExtractorsBegone.Localization
                 { settings.GetOptionGroupLocaleID(ModSettings.WorkVehiclesGroupName), "Work Vehicles" },
                 { settings.GetOptionGroupLocaleID(ModSettings.DespawnGroupName), "Despawn Existing" },
 
-                { settings.GetOptionLabelLocaleID(nameof(ModSettings.DisableExtractorBuildings)), "Disable Extractor Buildings" },
-                { settings.GetOptionDescLocaleID(nameof(ModSettings.DisableExtractorBuildings)), "Disables spawning new extractor buildings altogether." },
-                { settings.GetOptionLabelLocaleID(nameof(ModSettings.AllowFarmExtractors)), "Allow Extractors on Farms" },
-                { settings.GetOptionDescLocaleID(nameof(ModSettings.AllowFarmExtractors)), "Allows extractor buildings to spawn on farms." },
-                { settings.GetOptionLabelLocaleID(nameof(ModSettings.AllowForestExtractors)), "Allow Extractors on Forest" },
-                { settings.GetOptionDescLocaleID(nameof(ModSettings.AllowForestExtractors)), "Allows extractor buildings to spawn on forest." },
-                { settings.GetOptionLabelLocaleID(nameof(ModSettings.AllowOilExtractors )), "Allow Extractors on Oil" },
-                { settings.GetOptionDescLocaleID(nameof(ModSettings.AllowOilExtractors )), "Allows extractor buildings to spawn on oil." },
-                { settings.GetOptionLabelLocaleID(nameof(ModSettings.AllowOreExtractors)), "Allow Extractors on Ore" },
-                { settings.GetOptionDescLocaleID(nameof(ModSettings.AllowOreExtractors)), "Allows extractor buildings to spawn on ore." },
-                { settings.GetOptionLabelLocaleID(nameof(ModSettings.AllowFishExtractors)), "Allow Extractors on Fish" },
-                { settings.GetOptionDescLocaleID(nameof(ModSettings.AllowFishExtractors)), "Allows extractor buildings to spawn in fishing extractors (both land and sea)." },
+                { settings.GetOptionLabelLocaleID(nameof(ModSettings.DisableExtractorBuildings)), "Disable Extractor Spawn System" },
+                { settings.GetOptionDescLocaleID(nameof(ModSettings.DisableExtractorBuildings)), "Disables spawning new extractor buildings altogether. Note that this may have unintended side-effects for non-extractor buildings (storage and cargo areas). If you experience issues with those, leave the spawn system enabled and only disable the individual extractors below." },
+                { settings.GetOptionLabelLocaleID(nameof(ModSettings.FarmExtractorsSpawnFactor)), "Farm Extractors Spawn Factor" },
+                { settings.GetOptionDescLocaleID(nameof(ModSettings.FarmExtractorsSpawnFactor)), "Sets the base spawn rate for farm extractors. Set this to 0.0 to disable spawning extractor buildings. The default rate is 2.0." },
+                { settings.GetOptionLabelLocaleID(nameof(ModSettings.ForestExtractorsSpawnFactor)), "Forest Extractor Spawn Factor" },
+                { settings.GetOptionDescLocaleID(nameof(ModSettings.ForestExtractorsSpawnFactor)), "Sets the base spawn rate for forest extractors. Set this to 0.0 to disable spawning extractor buildings. The default rate is 2.0." },
+                { settings.GetOptionLabelLocaleID(nameof(ModSettings.OilExtractorsSpawnFactor )), "Oil Extractor Spawn Factor" },
+                { settings.GetOptionDescLocaleID(nameof(ModSettings.OilExtractorsSpawnFactor )), "Sets the base spawn rate for oil extractors. Set this to 0.0 to disable spawning extractor buildings. The default rate is 2.0." },
+                { settings.GetOptionLabelLocaleID(nameof(ModSettings.OreExtractorsSpawnFactor)), "Ore Extractor Spawn Factor" },
+                { settings.GetOptionDescLocaleID(nameof(ModSettings.OreExtractorsSpawnFactor)), "Sets the base spawn rate for ore extractors. Set this to 0.0 to disable spawning extractor buildings. The default rate is 2.0." },
+                { settings.GetOptionLabelLocaleID(nameof(ModSettings.FishExtractorsSpawnFactor)), "Fish Extractor Spawn Factor" },
+                { settings.GetOptionDescLocaleID(nameof(ModSettings.FishExtractorsSpawnFactor)), "Sets the base spawn rate for fish extractors. Set this to 0.0 to disable spawning extractor buildings. The default rate is 2.0." },
 
                 { settings.GetOptionLabelLocaleID(nameof(ModSettings.AllowFarmVehicles)), "Allow Farm Vehicles" },
                 { settings.GetOptionDescLocaleID(nameof(ModSettings.AllowFarmVehicles)), "Allows vehicles to spawn on farmland." },
@@ -50,18 +52,11 @@ namespace crud89.ExtractorsBegone.Localization
                 { settings.GetOptionDescLocaleID(nameof(ModSettings.AllowFishingBoats)), "Allows boats and vehicles to spawn fishing extractors." },
 
                 { settings.GetOptionLabelLocaleID(nameof(ModSettings.DespawnExtractors)), "Despawn Extractors" },
-                { settings.GetOptionDescLocaleID(nameof(ModSettings.DespawnExtractors)), "Despawns all existing extractor sub-buildings." },
+                { settings.GetOptionDescLocaleID(nameof(ModSettings.DespawnExtractors)), "Despawns all existing extractor sub-buildings for all extractor types, that have their spawn factor set to 0.0 above." },
                 { settings.GetOptionWarningLocaleID(nameof(ModSettings.DespawnExtractors)), "Do you want to permanently despawn all existing extractor buildings?" },
-                { settings.GetOptionLabelLocaleID(nameof(ModSettings.DespawnVehicles)), "Despawn Work Vehicles" },
-                { settings.GetOptionDescLocaleID(nameof(ModSettings.DespawnVehicles)), "Despawns all currently active work vehicles." },
-                { settings.GetOptionWarningLocaleID(nameof(ModSettings.DespawnVehicles)), "Do you want to permanently despawn all existing work vehicles?" }
+                { settings.GetOptionLabelLocaleID(nameof(ModSettings.ResetDefaultSpawnFactors)), "Set Default Spawn Rates" },
+                { settings.GetOptionDescLocaleID(nameof(ModSettings.ResetDefaultSpawnFactors)), "Resets all spawn rates to the default value. You can use this option before un-installing the mod from a savegame. Make sure the savegame is loaded first. After resetting the spawn factors, re-save the game." },
             };
-        }
-
-        public IEnumerable<KeyValuePair<string, string>> ReadEntries(IList<IDictionaryEntryError> errors, Dictionary<string, int> indexCounts) => Entries;
-
-        public void Unload()
-        {
         }
     }
 }

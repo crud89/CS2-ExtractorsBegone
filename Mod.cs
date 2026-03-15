@@ -4,8 +4,6 @@ using Game;
 using Game.Modding;
 using Game.SceneFlow;
 using Game.Simulation;
-using Game.UI;
-using Unity.Entities;
 
 namespace crud89.ExtractorsBegone
 {
@@ -40,12 +38,8 @@ namespace crud89.ExtractorsBegone
             if (GameManager.instance.modManager.TryGetExecutableAsset(this, out var asset))
                 log.Info($"Current mod asset at {asset.path}");
 
-            // Disable built-in systems.
-            DisableBuiltinSystems();
-            log.Info("Builtin systems disabled.");
-
             // Inject custom systems.
-            InjectSystemOverrides(updateSystem);
+            RegisterSystems(updateSystem);
             log.Info("Custom systems injected.");
 
             // Register mod settings.
@@ -71,27 +65,11 @@ namespace crud89.ExtractorsBegone
             Settings = null;
         }
 
-        private void DisableBuiltinSystems()
+        private void RegisterSystems(UpdateSystem updateSystem)
         {
-            var world = World.DefaultGameObjectInjectionWorld;
-
-            {
-                var areaSpawnSystem = world.GetExistingSystem<AreaSpawnSystem>();
-                ref var state = ref world.Unmanaged.ResolveSystemStateRef(areaSpawnSystem);
-                state.Enabled = false;
-            }
-
-            {
-                var areaLotSimulationSystem = world.GetExistingSystem<Game.Simulation.AreaLotSimulationSystem>();
-                ref var state = ref world.Unmanaged.ResolveSystemStateRef(areaLotSimulationSystem);
-                state.Enabled = false;
-            }
-        }
-
-        private void InjectSystemOverrides(UpdateSystem updateSystem)
-        {
-            updateSystem.UpdateAt<ExtractorAreaSystem>(SystemUpdatePhase.GameSimulation);
-            updateSystem.UpdateAt<AreaLotSimulationSystem>(SystemUpdatePhase.GameSimulation);
+            updateSystem.UpdateAt<DespawnExtractorSubBuildingsSystem>(SystemUpdatePhase.PostSimulation);
+            updateSystem.UpdateBefore<PatchExtractorAreasSystem, AreaSpawnSystem>(SystemUpdatePhase.GameSimulation);
+            updateSystem.UpdateAfter<DespawnExtractorVehiclesSystem, AreaLotSimulationSystem>(SystemUpdatePhase.GameSimulation);
         }
     }
 }

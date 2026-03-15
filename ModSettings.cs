@@ -2,7 +2,6 @@
 using Game.Modding;
 using Game.Settings;
 using Game.Simulation;
-using Game.UI;
 using System;
 using Unity.Entities;
 
@@ -11,7 +10,7 @@ namespace crud89.ExtractorsBegone
     using Systems;
 
     [FileLocation("ModsSettings/" + nameof(ExtractorsBegone) + "/" + nameof(ExtractorsBegone))]
-    [SettingsUIShowGroupName(ExtractorsGroupName, WorkVehiclesGroupName, DespawnGroupName)]
+    [SettingsUIShowGroupName(ExtractorsGroupName, DespawnGroupName, WorkVehiclesGroupName)]
     public sealed class ModSettings : ModSetting
     {
         public const string ExtractorsGroupName = "Extractors";
@@ -25,24 +24,49 @@ namespace crud89.ExtractorsBegone
         public bool DisableExtractorBuildings { get; set; }
 
         [SettingsUISection(ExtractorsGroupName)]
-        [SettingsUIDisableByConditionAttribute(typeof(ModSettings), nameof(DisableExtractorBuildings))]
-        public bool AllowFarmExtractors { get; set; }
+        [SettingsUIDisableByCondition(typeof(ModSettings), nameof(DisableExtractorBuildings))]
+        [SettingsUICustomFormat(fractionDigits = 1, maxValueWithFraction = 10.0f, separateThousands = false)]
+        [SettingsUISlider(min = 0.0f, max = 10.0f, scalarMultiplier = 1.0f, step = 0.1f)]
+        public float FarmExtractorsSpawnFactor { get; set; }
 
         [SettingsUISection(ExtractorsGroupName)]
-        [SettingsUIDisableByConditionAttribute(typeof(ModSettings), nameof(DisableExtractorBuildings))]
-        public bool AllowForestExtractors { get; set; }
+        [SettingsUIDisableByCondition(typeof(ModSettings), nameof(DisableExtractorBuildings))]
+        [SettingsUICustomFormat(fractionDigits = 1, maxValueWithFraction = 10.0f, separateThousands = false)]
+        [SettingsUISlider(min = 0.0f, max = 10.0f, scalarMultiplier = 1.0f, step = 0.1f)]
+        public float ForestExtractorsSpawnFactor { get; set; }
 
         [SettingsUISection(ExtractorsGroupName)]
-        [SettingsUIDisableByConditionAttribute(typeof(ModSettings), nameof(DisableExtractorBuildings))]
-        public bool AllowOilExtractors { get; set; }
+        [SettingsUIDisableByCondition(typeof(ModSettings), nameof(DisableExtractorBuildings))]
+        [SettingsUICustomFormat(fractionDigits = 1, maxValueWithFraction = 10.0f, separateThousands = false)]
+        [SettingsUISlider(min = 0.0f, max = 10.0f, scalarMultiplier = 1.0f, step = 0.1f)]
+        public float OilExtractorsSpawnFactor { get; set; }
 
         [SettingsUISection(ExtractorsGroupName)]
-        [SettingsUIDisableByConditionAttribute(typeof(ModSettings), nameof(DisableExtractorBuildings))]
-        public bool AllowOreExtractors { get; set; }
+        [SettingsUIDisableByCondition(typeof(ModSettings), nameof(DisableExtractorBuildings))]
+        [SettingsUICustomFormat(fractionDigits = 1, maxValueWithFraction = 10.0f, separateThousands = false)]
+        [SettingsUISlider(min = 0.0f, max = 10.0f, scalarMultiplier = 1.0f, step = 0.1f)]
+        public float OreExtractorsSpawnFactor { get; set; }
 
         [SettingsUISection(ExtractorsGroupName)]
-        [SettingsUIDisableByConditionAttribute(typeof(ModSettings), nameof(DisableExtractorBuildings))]
-        public bool AllowFishExtractors { get; set; }
+        [SettingsUIDisableByCondition(typeof(ModSettings), nameof(DisableExtractorBuildings))]
+        [SettingsUICustomFormat(fractionDigits = 1, maxValueWithFraction = 10.0f, separateThousands = false)]
+        [SettingsUISlider(min = 0.0f, max = 10.0f, scalarMultiplier = 1.0f, step = 0.1f)]
+        public float FishExtractorsSpawnFactor { get; set; }
+
+        [SettingsUIButtonGroup(DespawnGroupName)]
+        [SettingsUIButton]
+        [SettingsUIConfirmation]
+        public bool DespawnExtractors
+        {
+            set => DespawnExtractorBuildings(value);
+        }
+
+        [SettingsUIButtonGroup(DespawnGroupName)]
+        [SettingsUIButton]
+        public bool ResetDefaultSpawnFactors
+        {
+            set => ResetSpawnFactors(value);
+        }
 
         [SettingsUISection(WorkVehiclesGroupName)]
         public bool AllowFarmVehicles { get; set; }
@@ -59,25 +83,6 @@ namespace crud89.ExtractorsBegone
         [SettingsUISection(WorkVehiclesGroupName)]
         public bool AllowFishingBoats { get; set; }
 
-
-        // TODO: Extended controls for work vehicle types.
-
-        [SettingsUIButtonGroup(DespawnGroupName)]
-        [SettingsUIButton]
-        [SettingsUIConfirmation]
-        public bool DespawnExtractors
-        {
-            set => DespawnExtractorBuildings(value);
-        }
-
-        [SettingsUIButtonGroup(DespawnGroupName)]
-        [SettingsUIButton]
-        [SettingsUIConfirmation]
-        public bool DespawnVehicles
-        {
-            set => DespawnWorkVehicles(value);
-        }
-
         public ModSettings(IMod mod) : 
             base(mod) 
         {
@@ -86,12 +91,12 @@ namespace crud89.ExtractorsBegone
 
         public override void SetDefaults()
         {
-            this.DisableExtractorBuildings = true;
-            this.AllowFarmExtractors = false;
-            this.AllowForestExtractors = false;
-            this.AllowOilExtractors = false;
-            this.AllowOreExtractors = false;
-            this.AllowFishExtractors = false;
+            this.DisableExtractorBuildings = false;
+            this.FarmExtractorsSpawnFactor = 0.0f;
+            this.ForestExtractorsSpawnFactor = 0.0f;
+            this.OilExtractorsSpawnFactor = 0.0f;
+            this.OreExtractorsSpawnFactor = 0.0f;
+            this.FishExtractorsSpawnFactor = 0.0f;
 
             this.AllowFarmVehicles = false;
             this.AllowForestVehicles = false;
@@ -115,8 +120,8 @@ namespace crud89.ExtractorsBegone
 
             try
             {
-                var extractorAreaSystem = world.GetExistingSystem<ExtractorAreaSystem>();
-                ref var state = ref world.Unmanaged.ResolveSystemStateRef(extractorAreaSystem);
+                var areaSpawnSystem = world.GetExistingSystem<AreaSpawnSystem>();
+                ref var state = ref world.Unmanaged.ResolveSystemStateRef(areaSpawnSystem);
                 state.Enabled = !disabled;
             }
             catch (Exception ex)
@@ -130,15 +135,26 @@ namespace crud89.ExtractorsBegone
             if (!despawn)
                 return;
 
-            // TODO: Implement me.
+            // Get default game object.
+            var world = World.DefaultGameObjectInjectionWorld;
+
+            // Enable the extractor sub buildings despawn system for one frame.
+            ExtractorsBegone.log.InfoFormat("Despawn existing extractors...");
+            var system = world.GetOrCreateSystemManaged<DespawnExtractorSubBuildingsSystem>();
+            system.Enabled = true;
         }
 
-        private void DespawnWorkVehicles(bool despawn)
+        private void ResetSpawnFactors(bool reset)
         {
-            if (!despawn)
+            if (!reset)
                 return;
 
-            // TODO: Implement me.
+            this.DisableExtractorBuildings = false;
+            this.FarmExtractorsSpawnFactor = 2.0f;
+            this.ForestExtractorsSpawnFactor = 2.0f;
+            this.OilExtractorsSpawnFactor = 2.0f;
+            this.OreExtractorsSpawnFactor = 2.0f;
+            this.FishExtractorsSpawnFactor = 2.0f;
         }
     }
 }
