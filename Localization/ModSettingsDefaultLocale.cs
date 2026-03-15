@@ -29,15 +29,15 @@ namespace crud89.ExtractorsBegone.Localization
 
                 { settings.GetOptionLabelLocaleID(nameof(ModSettings.DisableExtractorBuildings)), "Disable Extractor Spawn System" },
                 { settings.GetOptionDescLocaleID(nameof(ModSettings.DisableExtractorBuildings)), "Disables spawning new extractor buildings altogether. Note that this may have unintended side-effects for non-extractor buildings (storage and cargo areas). If you experience issues with those, leave the spawn system enabled and only disable the individual extractors below." },
-                { settings.GetOptionLabelLocaleID(nameof(ModSettings.FarmExtractorsSpawnFactor)), "Farm Extractors Spawn Factor" },
+                { settings.GetOptionLabelLocaleID(nameof(ModSettings.FarmExtractorsSpawnFactor)), "Farm Extractors Spawn Rate" },
                 { settings.GetOptionDescLocaleID(nameof(ModSettings.FarmExtractorsSpawnFactor)), "Sets the base spawn rate for farm extractors. Set this to 0.0 to disable spawning extractor buildings. The default rate is 2.0." },
-                { settings.GetOptionLabelLocaleID(nameof(ModSettings.ForestExtractorsSpawnFactor)), "Forest Extractor Spawn Factor" },
+                { settings.GetOptionLabelLocaleID(nameof(ModSettings.ForestExtractorsSpawnFactor)), "Forest Extractor Spawn Rate" },
                 { settings.GetOptionDescLocaleID(nameof(ModSettings.ForestExtractorsSpawnFactor)), "Sets the base spawn rate for forest extractors. Set this to 0.0 to disable spawning extractor buildings. The default rate is 2.0." },
-                { settings.GetOptionLabelLocaleID(nameof(ModSettings.OilExtractorsSpawnFactor )), "Oil Extractor Spawn Factor" },
+                { settings.GetOptionLabelLocaleID(nameof(ModSettings.OilExtractorsSpawnFactor )), "Oil Extractor Spawn Rate" },
                 { settings.GetOptionDescLocaleID(nameof(ModSettings.OilExtractorsSpawnFactor )), "Sets the base spawn rate for oil extractors. Set this to 0.0 to disable spawning extractor buildings. The default rate is 2.0." },
-                { settings.GetOptionLabelLocaleID(nameof(ModSettings.OreExtractorsSpawnFactor)), "Ore Extractor Spawn Factor" },
+                { settings.GetOptionLabelLocaleID(nameof(ModSettings.OreExtractorsSpawnFactor)), "Ore Extractor Spawn Rate" },
                 { settings.GetOptionDescLocaleID(nameof(ModSettings.OreExtractorsSpawnFactor)), "Sets the base spawn rate for ore extractors. Set this to 0.0 to disable spawning extractor buildings. The default rate is 2.0." },
-                { settings.GetOptionLabelLocaleID(nameof(ModSettings.FishExtractorsSpawnFactor)), "Fish Extractor Spawn Factor" },
+                { settings.GetOptionLabelLocaleID(nameof(ModSettings.FishExtractorsSpawnFactor)), "Fish Extractor Spawn Rate" },
                 { settings.GetOptionDescLocaleID(nameof(ModSettings.FishExtractorsSpawnFactor)), "Sets the base spawn rate for fish extractors. Set this to 0.0 to disable spawning extractor buildings. The default rate is 2.0." },
 
                 { settings.GetOptionLabelLocaleID(nameof(ModSettings.AllowFarmVehicles)), "Allow Farm Vehicles" },
@@ -56,6 +56,8 @@ namespace crud89.ExtractorsBegone.Localization
                 { settings.GetOptionWarningLocaleID(nameof(ModSettings.DespawnExtractors)), "Do you want to permanently despawn all existing extractor buildings?" },
                 { settings.GetOptionLabelLocaleID(nameof(ModSettings.ResetDefaultSpawnFactors)), "Set Default Spawn Rates" },
                 { settings.GetOptionDescLocaleID(nameof(ModSettings.ResetDefaultSpawnFactors)), "Resets all spawn rates to the default value. You can use this option before un-installing the mod from a savegame. Make sure the savegame is loaded first. After resetting the spawn factors, re-save the game." },
+                { settings.GetOptionLabelLocaleID(nameof(ModSettings.ZeroSpawnFactors)), "Set Spawn Rates to Zero" },
+                { settings.GetOptionDescLocaleID(nameof(ModSettings.ZeroSpawnFactors)), "Sets all spawn rates to zero." },
             };
         }
     }

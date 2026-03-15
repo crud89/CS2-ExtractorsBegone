@@ -68,6 +68,13 @@ namespace crud89.ExtractorsBegone
             set => ResetSpawnFactors(value);
         }
 
+        [SettingsUIButtonGroup(DespawnGroupName)]
+        [SettingsUIButton]
+        public bool ZeroSpawnFactors
+        {
+            set => ResetSpawnFactors(value, 0.0f);
+        }
+
         [SettingsUISection(WorkVehiclesGroupName)]
         public bool AllowFarmVehicles { get; set; }
 
@@ -123,6 +130,10 @@ namespace crud89.ExtractorsBegone
                 var areaSpawnSystem = world.GetExistingSystem<AreaSpawnSystem>();
                 ref var state = ref world.Unmanaged.ResolveSystemStateRef(areaSpawnSystem);
                 state.Enabled = !disabled;
+
+                var patchExtractorAreasSystem = world.GetExistingSystem<PatchExtractorAreasSystem>();
+                state = ref world.Unmanaged.ResolveSystemStateRef(patchExtractorAreasSystem);
+                state.Enabled = !disabled;
             }
             catch (Exception ex)
             {
@@ -144,17 +155,19 @@ namespace crud89.ExtractorsBegone
             system.Enabled = true;
         }
 
-        private void ResetSpawnFactors(bool reset)
+        private void ResetSpawnFactors(bool reset, float factor = 2.0f)
         {
             if (!reset)
                 return;
 
             this.DisableExtractorBuildings = false;
-            this.FarmExtractorsSpawnFactor = 2.0f;
-            this.ForestExtractorsSpawnFactor = 2.0f;
-            this.OilExtractorsSpawnFactor = 2.0f;
-            this.OreExtractorsSpawnFactor = 2.0f;
-            this.FishExtractorsSpawnFactor = 2.0f;
+            this.FarmExtractorsSpawnFactor = factor;
+            this.ForestExtractorsSpawnFactor = factor;
+            this.OilExtractorsSpawnFactor = factor;
+            this.OreExtractorsSpawnFactor = factor;
+            this.FishExtractorsSpawnFactor = factor;
+
+            this.ToggleExtractorBuildings(this.DisableExtractorBuildings);
         }
     }
 }
