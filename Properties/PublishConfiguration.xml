@@ -1,24 +1,39 @@
 ﻿<Publish>
 	<ModId Value="120143" />
 	<DisplayName Value="Extractors Begone" />
-	<ShortDescription Value="Disables sub-buildings and work vehicles for extractor areas." />
+	<ShortDescription Value="Controls sub-building and work vehicle spawning for extractor areas in specialized industries." />
 	<LongDescription>
-		This mod disables two in-game systems:
+This mod allows to customize two aspects of extractor areas in specialized industries:
 
-		* The area spawn system is used to spawn extractor and storage sub-buildings.
-		* The work car AI system, which controls cars that spawn within extractor areas.
+* It allows to set the spawn rate for extractor sub-buildings, including to disable them altogether by setting the rate to `0.0`.
+* It can disable the spawning of work vehicles within the extractor areas.
 
-		Note that this also includes the specialized industries from the Bridges and Ports DLC (inland and offshore fishing), as they share the same systems.
+It supports all currently available types of specialized industry, including farming, forestry, oil, ore and fishing.
 
-		Those sub-buildings and vehicles are purely visual though! The resource simulation itself is handled independently and resources will still accumulate in the central buildings over time and are transported from there. Overall, disabling those sub-buildings is a great option, if you want to fully customize your farms, quarries, mines and so on. It might even marginally improve performance, but don't expect miracles.
+The main benefits of this mod (especially compared to the traditional method of creating narrow mazes of extractor areas) are:
 
-		This mod disables those systems altogether. It is not possible to only disable them per industry, nor is there a UI at the moment.
+* it's more convenient to use,
+* it does not reduce industry output (which depends on the extractor area size),
+* it allows to disable work vehicles as well.
 
-		As always, use this at your own risk. Back up your savegames and test this in an fresh city first. It should work with existing saves and uninstalling the mod should restore the original functionality.
+### Setup
 
-		After installing this mod you can (and might want to) remove existing sub-buildings and work vehicles using the better bulldozer mod. Work vehicles and boats will not despawn, when this mod is used with a savegame where they are already spawned! After installing this mod, I recommend to immediately pause the savegame after first loading into it and remove all work vehicles. They will continue to drive to their last destination, where they will get stuck. Normally you can remove them there, but I noticed that when the last destination was the central industry building, the vehicles sometimes aren't clickable from better bulldozer, making them stuck there forever.
+After installing the mod, simply load into your savegame or start a new game. By default, all extractor buildings and most work vehicles (except fishing boats) are disabled. Work vehicles will immediately despawn automatically. You can remove already spawned extractor sub-buildings from the mod's menu in the game menu. By clicking the "Despawn Extractors" button, all extractors will be despawn, except in those industries for which you set a non-zero spawn rate. You may even try to disable the extractor area spawn system altogether, which may get handy for future industry additions or other types of area spawnables (those include storage and cargo areas). However, keep in mind that this may have unintended side effects.
+		
+Besides disabling extractor buildings, this mod also allows you to toggle spawning work vehicles on a per-industry level. You can access the corresponding settings from the game menu, too.
+
+### Uninstalling
+		
+The spawn rates are potentially stored into your savegames. To make sure to safely remove the mod, load into your savegame first, then reset the spawn rates to their default values (`2.0`, or just use the corresponding button). Save the game afterwards before ultimately uninstalling the mod.
+		
+If you somehow missed resetting the spawn rates and are left wondering how to get extractors spawning back into your existing industries, simply re-install the mod and follow the procedure described above.
+
+### Sources and Feedback
+
+The source code for this mod is available at [GitHub](https://github.com/crud89/CS2-ExtractorsBegone/). If you encounter any issues with this mod, or want to leave feedback, please [head over there as well](https://github.com/crud89/CS2-ExtractorsBegone/issues)!
 	</LongDescription>
 	<Thumbnail Value="Properties/Thumbnail.png" />
+	<Screenshot Value="Properties/screen00.jpg" />
 	<Screenshot Value="Properties/screen01.jpg" />
 	<Screenshot Value="Properties/screen02.jpg" />
 	<Tag Value="" />
@@ -30,7 +45,13 @@
 	<ChangeLog>
 **Version 1.1**
 
-- Added settings UI
+- Add settings in main menu
+- Add controls for per-industry spawn rates
+- Add controls for per-industry vehicle toggles
+- Add button to quickly remove existing extractor buildings
+- Fix issue with existing work vehicles not automatically despawning
+- Fix issue with trucks getting stuck in harbors
+- Fix issues with cargo and storage buildings not working
 		
 **Version 1.0**
 
