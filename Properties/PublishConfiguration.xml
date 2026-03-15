@@ -43,7 +43,7 @@ The source code for this mod is available at [GitHub](https://github.com/crud89/
 	<Dependency Id="" />
 	<RequiredDLC Value="" />
 	<ChangeLog>
-**Version 1.1**
+# Version 1.1
 
 - Add settings in main menu
 - Add controls for per-industry spawn rates
@@ -52,10 +52,6 @@ The source code for this mod is available at [GitHub](https://github.com/crud89/
 - Fix issue with existing work vehicles not automatically despawning
 - Fix issue with trucks getting stuck in harbors
 - Fix issues with cargo and storage buildings not working
-		
-**Version 1.0**
-
-Initial Release.
 	</ChangeLog>
 	<ExternalLink Type="github" Url="https://github.com/crud89/CS2-ExtractorsBegone" />
 </Publish>
