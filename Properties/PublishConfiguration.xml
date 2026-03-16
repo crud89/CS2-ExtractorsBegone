@@ -5,30 +5,33 @@
 	<LongDescription>
 This mod allows to customize two aspects of extractor areas in specialized industries:
 
-* It allows to set the spawn rate for extractor sub-buildings, including to disable them altogether by setting the rate to `0.0`.
-* It can disable the spawning of work vehicles within the extractor areas.
-
-It supports all currently available types of specialized industry, including farming, forestry, oil, ore and fishing.
+- It allows to set the spawn rate for extractor sub-buildings, including to disable them altogether by setting the rate to 0.0.
+- It can disable the spawning of work vehicles within the extractor areas.
+- It supports all currently available types of specialized industry, including farming, forestry, oil, ore and fishing.
 
 The main benefits of this mod (especially compared to the traditional method of creating narrow mazes of extractor areas) are:
 
-* it's more convenient to use,
-* it does not reduce industry output (which depends on the extractor area size),
-* it allows to disable work vehicles as well.
+- it's more convenient to use,
+- it does not reduce industry output (which depends on the extractor area size),
+- it allows to disable work vehicles as well.
 
-### Setup
+# Setup & Usage
 
-After installing the mod, simply load into your savegame or start a new game. By default, all extractor buildings and most work vehicles (except fishing boats) are disabled. Work vehicles will immediately despawn automatically. You can remove already spawned extractor sub-buildings from the mod's menu in the game menu. By clicking the "Despawn Extractors" button, all extractors will be despawn, except in those industries for which you set a non-zero spawn rate. You may even try to disable the extractor area spawn system altogether, which may get handy for future industry additions or other types of area spawnables (those include storage and cargo areas). However, keep in mind that this may have unintended side effects.
-		
-Besides disabling extractor buildings, this mod also allows you to toggle spawning work vehicles on a per-industry level. You can access the corresponding settings from the game menu, too.
+After installing the mod, simply load into your savegame or start a new game. By default, all extractor buildings and most work vehicles (except fishing boats) are disabled. You can remove already spawned extractor sub-buildings from the mod's menu in the game menu. By clicking the "Despawn Extractors" button, all extractors will be despawn, except in those industries for which you set a non-zero spawn rate. 
 
-### Uninstalling
-		
-The spawn rates are potentially stored into your savegames. To make sure to safely remove the mod, load into your savegame first, then reset the spawn rates to their default values (`2.0`, or just use the corresponding button). Save the game afterwards before ultimately uninstalling the mod.
-		
+The spawn rate controls how fast new buildings spawn on extractor areas for each industry. The default value is 2.0. It does not affect the distribution or density of the buildings, just how fast they spawn or level up throughout your game. The recommended way of using this mod is to set the spawn rates to 0.0 for those industries, where you do not want any extractors to spawn. 
+
+You may even try to disable the extractor area spawn system altogether, which may get handy for future industry additions or other types of area spawnables (those include storage and cargo areas). However, keep in mind that this may have unintended side effects. None of those are, however, permanent. If you enable the area spawn system again, the default functionality will be restored.
+
+Besides disabling extractor buildings, this mod also allows you to toggle spawning work vehicles on a per-industry level. You can access the corresponding settings from the game menu, too. After loading into a game, previously spawned work vehicles are immediately despawned, if they are disabled from the mod options.
+
+# Uninstalling
+
+The spawn rates are potentially stored into your savegames. To make sure to safely remove the mod, load into your savegame first, then reset the spawn rates to their default values (2.0, or just use the corresponding button). Save the game afterwards before ultimately uninstalling the mod.
+
 If you somehow missed resetting the spawn rates and are left wondering how to get extractors spawning back into your existing industries, simply re-install the mod and follow the procedure described above.
 
-### Sources and Feedback
+# Sources and Feedback
 
 The source code for this mod is available at [GitHub](https://github.com/crud89/CS2-ExtractorsBegone/). If you encounter any issues with this mod, or want to leave feedback, please [head over there as well](https://github.com/crud89/CS2-ExtractorsBegone/issues)!
 	</LongDescription>
